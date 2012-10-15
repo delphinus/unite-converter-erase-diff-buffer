@@ -13,7 +13,11 @@ let s:converter = {
 function! s:converter.filter(candidates, context)
     let index = len(a:candidates) - 1
     while index >= 0
-        if match(a:candidates[index].abbr, '^\(git\|svn\|cvs\) \(diff\|review\) ') > -1
+        let abbr = a:candidates[index].abbr
+        if match(abbr, '\v^(\[nofile\])? (git|svn|cvs) (diff|review) ') > -1
+            call remove(a:candidates, index)
+        endif
+        if match(abbr, '^gist:') > -1
             call remove(a:candidates, index)
         endif
         let index = index - 1
